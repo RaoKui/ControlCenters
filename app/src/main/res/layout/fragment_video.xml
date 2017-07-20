@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.yxkj.kzzx.ijk.media.IjkVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+    </com.yxkj.kzzx.ijk.media.IjkVideoView>
+
+    <Button
+        android:id="@+id/btn_chose"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="选择本地视频" />
+
+    <Button
+        android:id="@+id/btn_play"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="播放指定url视频" />
+
+    <EditText
+        android:id="@+id/et_video_url"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+</LinearLayout>
