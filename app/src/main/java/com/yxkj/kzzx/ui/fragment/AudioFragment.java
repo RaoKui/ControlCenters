@@ -18,14 +18,17 @@ import com.yxkj.kzzx.controlcenter.R;
 import com.yxkj.kzzx.presenter.AudioPresenter;
 import com.yxkj.kzzx.ui.widget.MyAudioPlayer;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * 播放音频
- * Created byRaoKui  on 2017/7/20.
+ * Created by RaoKui  on 2017/7/20.
  */
 
 public class AudioFragment extends BaseFragment<AudioContract.View, AudioPresenter> implements AudioContract.View {
@@ -48,7 +51,6 @@ public class AudioFragment extends BaseFragment<AudioContract.View, AudioPresent
     @Override
     protected void initData() {
         Logger.d("initdata");
-
     }
 
     @Override
@@ -94,7 +96,21 @@ public class AudioFragment extends BaseFragment<AudioContract.View, AudioPresent
             if (requestCode == 1) {
                 Uri uri = data.getData();
                 String path = uri.getPath().toString();
-                mPresenter.playLocalAudio(path);
+//                mPresenter.playLocalAudio(path);
+                IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
+                try {
+                    ijkMediaPlayer.setDataSource(path);
+                    ijkMediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(IMediaPlayer mp) {
+                            mp.start();
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
             }
         }
     }

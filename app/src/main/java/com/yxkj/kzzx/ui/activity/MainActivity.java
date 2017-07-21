@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
 
+import com.yxkj.kzzx.adapter.PagerFragmentAdapter;
 import com.yxkj.kzzx.constant.ReceiverConstant;
 import com.yxkj.kzzx.base.BaseActivity;
 import com.yxkj.kzzx.contract.MainContract;
@@ -20,12 +22,9 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity<MainContract.View, MainPresenter> {
 
-    @BindView(R.id.btn_open_ppt)
-    Button btnOpenPPT;
-    @BindView(R.id.btn_open_audio)
-    Button btnOpenAudio;
-    private PPTFragment pptFragment;
-    private AudioFragment audioFragment;
+    @BindView(R.id.vp_fragment)
+    ViewPager vpFragment;
+
 
     @Override
     protected MainPresenter initPresenter() {
@@ -39,8 +38,7 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
 
     @Override
     protected void init() {
-        pptFragment = new PPTFragment();
-        audioFragment = new AudioFragment();
+        vpFragment.setAdapter(new PagerFragmentAdapter(getSupportFragmentManager()));
     }
 
     @Override
@@ -50,31 +48,8 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
 
     @Override
     protected void initListener() {
-        btnOpenPPT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!pptFragment.isAdded()) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.add(R.id.main, pptFragment).show(pptFragment).commit();
-                } else {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.show(pptFragment).commit();
-                }
-            }
-        });
 
-        btnOpenAudio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!audioFragment.isAdded()) {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.add(R.id.main, audioFragment).show(audioFragment).commit();
-                } else {
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.show(audioFragment).commit();
-                }
-            }
-        });
+
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -82,8 +57,7 @@ public class MainActivity extends BaseActivity<MainContract.View, MainPresenter>
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case ReceiverConstant.WPS_FILE_CLOSE:
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.hide(pptFragment).commitAllowingStateLoss();
+
                     break;
             }
         }

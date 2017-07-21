@@ -1,6 +1,10 @@
 package com.yxkj.kzzx.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -8,10 +12,12 @@ import android.widget.EditText;
 import com.yxkj.kzzx.base.BaseFragment;
 import com.yxkj.kzzx.contract.VideoContract;
 import com.yxkj.kzzx.controlcenter.R;
+import com.yxkj.kzzx.ijk.media.AndroidMediaController;
 import com.yxkj.kzzx.ijk.media.IjkVideoView;
 import com.yxkj.kzzx.presenter.VideoPresenter;
 
 import butterknife.BindView;
+import tv.danmaku.ijk.media.player.IMediaPlayer;
 
 /**
  * 播放视频
@@ -51,7 +57,59 @@ public class VideoFragment extends BaseFragment<VideoContract.View, VideoPresent
 
     @Override
     protected void initListener() {
+        btnChose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choseFile();
+            }
+        });
 
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String path = etVideoUrl.getText().toString().trim();
+                playVideo(path);
+            }
+        });
     }
 
+    private void playVideo(String path) {
+
+        videoView.setVideoPath(path);
+        videoView.setMediaController(new AndroidMediaController(getContext()));
+        videoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(IMediaPlayer mp) {
+                mp.start();
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            String path = uri.getPath().toString();
+            // TODO 播放本地
+
+            videoView.setVideoURI(uri);
+            Log.d("uri", "onActivityResult: " + path);
+            videoView.setMediaController(new AndroidMediaController(getContext()));
+
+            videoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(IMediaPlayer mp) {
+                    mp.start();
+                }
+            });
+        }
+    }
+
+    private void choseFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");//设置类型，我这里是任意类型，任意后缀的可以这样写。
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 1);
+    }
 }

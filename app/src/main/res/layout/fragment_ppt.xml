@@ -17,6 +17,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:id="@+id/et_file_name"
+        android:text="testppt.pptx"
         android:background="@android:color/white" />
 
     <Button

@@ -20,17 +20,13 @@
     <EditText
         android:id="@+id/et_audio_url"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:text="http://mp3.haoduoge.com/s/2017-07-04/1499180571.mp3" />
 
     <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:max="100"/>
-
-    <com.yxkj.kzzx.ijk.media.IjkVideoView
-        android:id="@+id/video_view"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"></com.yxkj.kzzx.ijk.media.IjkVideoView>
+        android:max="100" />
 </LinearLayout>
